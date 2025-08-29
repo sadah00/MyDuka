@@ -29,7 +29,7 @@ def insert_products(product_values):
 # input from user
 name= input("Enter product name: ")
 buying_price= float(input("Enter buying price: "))
-selling_price=float(input("Enter selling price: "))
+selling_price= float(input("Enter selling price: "))
 
 product_values=(name,buying_price,selling_price)
 

@@ -106,19 +106,15 @@ class Car:
         self.is_running=is_running
 
     def start(self):
-        if not self.is_running:
+        if self.is_running:
             self.is_running=True
             print("Car started")
-        else:
-            print("Car is already running")
-
+       
     def stop(self):
         if self.is_running:
             self.is_running=False
             print("Car stopped")
-        else:
-            print("Car is already stopped")
-
+       
     def refuel(self,amount):
         if amount>0:
             if self.fuel_level + amount <= self.fuel_capacity:
@@ -131,20 +127,25 @@ class Car:
 
     def drive(self,distance):
         if self.is_running:
-            fuel_needed = distance / 10  # assuming car consumes 1 liter per 10 km
-            if fuel_needed <= self.fuel_level:
+            fuel_needed = distance / 10
+            if self.fuel_level >= fuel_needed:
                 self.fuel_level -= fuel_needed
                 print(f"Car drove {distance} km")
             else:
-                print("Insufficient fuel to drive the distance")
+                print("Not enough fuel to drive")
         else:
             print("Start the car first")
 
     def display_car_info(self):
         print(f"Brand: {self.brand} Model: {self.model} Year: {self.year} Fuel Capacity: {self.fuel_capacity} liters Fuel Level: {self.fuel_level} liters Is Running: {self.is_running}")
 
-machine1=Car("Toyota","Corolla",2020,50)
+machine1=Car("Toyota","Corolla",2020,50,20,False)
 machine2=Car("Honda","Civic",2019,45,10,True)
+
 machine1.refuel(30)
 machine1.start()
+machine2.stop()
+machine1.drive(30)
+
 machine1.display_car_info()
+machine2.display_car_info()

@@ -10,8 +10,8 @@ def get_products():
     products = cur.fetchall()
     return products
 
-products = get_products()
-print(products)
+# products = get_products()
+# print(products)
 
 # displaying sales
 def get_sales():
@@ -19,21 +19,21 @@ def get_sales():
     sales = cur.fetchall()
     return sales
 
-sales=get_sales()
-print(sales)
+# sales=get_sales()
+# print(sales)
 
 # insert products
 def insert_products(product_values):
     cur.execute(f"INSERT INTO products (name,buying_price,selling_price) VALUES{product_values}")
     conn.commit()
 # input from user
-name= input("Enter product name: ")
-buying_price= float(input("Enter buying price: "))
-selling_price= float(input("Enter selling price: "))
+# name= input("Enter product name: ")
+# buying_price= float(input("Enter buying price: "))
+# selling_price= float(input("Enter selling price: "))
 
-product_values=(name,buying_price,selling_price)
+# product_values=(name,buying_price,selling_price)
 
-insert_products(product_values)
+# insert_products(product_values)
 
 # inserting more products
 
@@ -47,9 +47,9 @@ def insert_sales(sale_values):
     cur.execute(f"INSERT INTO sales (pid, quantity) VALUES {sale_values}")
     conn.commit()
 
-pid=int(input("Enter product id: "))
-quantity=int(input("Enter quantity: "))
+# pid=int(input("Enter product id: "))
+# quantity=int(input("Enter quantity: "))
 
-sale_values=(pid,quantity)
+# sale_values=(pid,quantity)
 
-insert_sales(sale_values)
+# insert_sales(sale_values)

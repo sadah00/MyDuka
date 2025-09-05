@@ -1,4 +1,5 @@
 from flask import Flask , render_template 
+from database import get_products
 
 # creating a flask instance
 app = Flask(__name__)
@@ -21,18 +22,19 @@ def register():
 
 @app.route('/stock')
 def stock():
-    return render_template("stock.html")
+    stock = [200,100,50]
+    return render_template("stock.html",stock = stock)
 
 @app.route('/products')
 def products():
-    products = ["Bread","Milk","Eggs"]
-    return render_template("products.html")
+    products = get_products()
+    return render_template("products.html",products = products )
 
 @app.route('/sales')
 def sales():
     sales = {"id 1":100, "id 2":200, "id 3":300}
-    return render_template("sales.html")
+    return render_template("sales.html", sales = sales)
 
 
 
-app.run()
+app.run(debug=True)

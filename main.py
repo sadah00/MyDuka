@@ -1,6 +1,6 @@
 from flask import Flask , render_template 
 from database import get_products
-
+from database import get_sales
 # creating a flask instance
 app = Flask(__name__)
 
@@ -32,7 +32,7 @@ def products():
 
 @app.route('/sales')
 def sales():
-    sales = {"id 1":100, "id 2":200, "id 3":300}
+    sales = get_sales()
     return render_template("sales.html", sales = sales)
 
 

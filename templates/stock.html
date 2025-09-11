@@ -7,8 +7,67 @@
     <h3 class="text-center fs-3 fw-bold">Stock Management</h3>
 </div>
 <div>
-    {%for i in stock%}
-    <p>{{i}}</p>
-    {%endfor%}
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Stock
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Stock Management</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/manage_stock" method="POST">
+                        <div>
+                            <select class="form-select" aria-label="Default select example" name="pid">
+                                <option selected>Select Product</option>
+                                {% for i in products %}
+                                <option value="{{ i[0] }}">{{ i[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleInputPassword1" class="form-label">Stock Quantity</label>
+                            <input type="number" name="stockquantity" class="form-control" id="exampleInputPassword1">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Display Stock</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
+<div>
+    <table id="example" class="table table-striped container">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>PID</th>
+                <th>STOCK_QUANTITY</th>
+                <th>CREATED_AT</th>
+            </tr>
+        </thead>
+        {% for i in stock %}
+        <tbody>
+            <tr>
+                <td>{{ i[0] }}</td>
+                <td>{{ i[1] }}</td>
+                <td>{{ i[2] }}</td>
+                <td>{{ i[3] }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
+
+
 {% endblock %}

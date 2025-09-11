@@ -53,3 +53,15 @@ def insert_sales(sale_values):
 # sale_values=(pid,quantity)
 
 # insert_sales(sale_values)
+
+def get_stock():
+    cur.execute("SELECT * FROM stock")
+    stock = cur.fetchall()
+    return stock
+
+def insert_stock(stock_values):
+    cur.execute(f"INSERT INTO stock (pid,stock_quantity,created_at) VALUES{stock_values}")
+    conn.commit()
+
+
+

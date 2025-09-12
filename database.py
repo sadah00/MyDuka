@@ -60,8 +60,14 @@ def get_stock():
     return stock
 
 def insert_stock(stock_values):
-    cur.execute(f"INSERT INTO stock (pid,stock_quantity,created_at) VALUES{stock_values}")
+    cur.execute(f"INSERT INTO stock (pid,stock_quantity) VALUES{stock_values}")
     conn.commit()
 
+def available_stock(pid):
+    cur.execute(f"select sum(stock_quantity) from stock where pid = {pid}")
+    total_stock = cur.fetchone()[0] or 0
 
+    cur.execute(f"select sum(quantity) from sales where pid = {pid}")
+    total_sales = cur.fetchone()[0] or 0
 
+    return total_stock - total_sales

@@ -1,5 +1,5 @@
 from flask import Flask , render_template ,request ,redirect ,url_for
-from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock
+from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock,available_stock
 
 # creating a flask instance
 app = Flask(__name__)
@@ -23,15 +23,15 @@ def register():
 @app.route('/stock')
 def stock():
     stock = get_stock()
-    sales = get_sales()
     products = get_products()
-    return render_template("stock.html",stock = stock, sales = sales, products = products)
+    return render_template("stock.html",stock = stock, products = products)
 
 @app.route('/manage_stock',methods=['GET','POST'])
 def manage_stock():
+    pid = request.form["pid"]
     stock_quantity= request.form["stockquantity"]
 
-    new_stock=[stock_quantity]
+    new_stock=(pid,stock_quantity)
     insert_stock(new_stock)
     return redirect(url_for('stock'))
 
@@ -62,6 +62,10 @@ def make_sale():
     quantity= request.form["quantity"]
 
     new_sale=(pid,quantity)
+    check_stock = available_stock(pid)
+    if check_stock < float(quantity):
+        print("Insufficient stock")
+        return redirect(url_for('sales'))
     insert_sales(new_sale)
     return redirect(url_for('sales'))
 

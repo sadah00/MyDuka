@@ -71,3 +71,12 @@ def available_stock(pid):
     total_sales = cur.fetchone()[0] or 0
 
     return total_stock - total_sales
+
+def insert_user(user_details):
+    cur.execute(f"INSERT INTO users (full_name,phone_number,email,password) VALUES{user_details}")
+    conn.commit()
+
+def check_user(email):
+    cur.execute(f"SELECT * FROM users WHERE email='{email}'")
+    user = cur.fetchone()
+    return user

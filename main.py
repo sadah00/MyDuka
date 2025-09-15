@@ -1,8 +1,10 @@
-from flask import Flask , render_template ,request ,redirect ,url_for
-from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock,available_stock
+from flask import Flask , render_template ,request ,redirect ,url_for,flash
+from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock,available_stock,insert_user
 
 # creating a flask instance
 app = Flask(__name__)
+
+app.secret_key = 'delicate88'
 
 @app.route('/')  # unique routes
 def home():  # must have a unique name
@@ -18,7 +20,15 @@ def login():
 
 @app.route('/register')
 def register():
-    return render_template("register.html")
+    full_name = request.form['full_name']
+    phone_number = request.form['phone_number']
+    email = request.form['email']
+    password = request.form['password']
+
+    user_details = (full_name, phone_number, email, password)
+    insert_user(user_details)
+    flash("Registration successful", "success")
+    return redirect(url_for('login'))
 
 @app.route('/stock')
 def stock():
@@ -33,6 +43,7 @@ def manage_stock():
 
     new_stock=(pid,stock_quantity)
     insert_stock(new_stock)
+    flash("Stock updated successfully","success")
     return redirect(url_for('stock'))
 
 @app.route('/products')
@@ -48,6 +59,7 @@ def add_products():
 
     new_products = (product_name,buying_price,selling_price)
     insert_products(new_products)
+    flash("Product added successfully","success")
     return redirect(url_for('products'))
 
 @app.route('/sales')
@@ -67,6 +79,7 @@ def make_sale():
         print("Insufficient stock")
         return redirect(url_for('sales'))
     insert_sales(new_sale)
+    flash("Sale made successfully","success")
     return redirect(url_for('sales'))
 
 

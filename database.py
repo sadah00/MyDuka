@@ -76,7 +76,12 @@ def insert_user(user_details):
     cur.execute(f"INSERT INTO users (full_name,phone_number,email,password) VALUES{user_details}")
     conn.commit()
 
+
 def check_user(email):
-    cur.execute(f"SELECT * FROM users WHERE email='{email}'")
-    user = cur.fetchone()
+    cur.execute("select * from users where email = %s",(email,))
+    user = cur.fetchall()   
     return user
+
+
+# test = check_user('john@gmail.com')
+# print(test)

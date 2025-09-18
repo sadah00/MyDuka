@@ -1,6 +1,7 @@
-from flask import Flask , render_template ,request ,redirect ,url_for,flash
+from flask import Flask , render_template ,request ,redirect ,url_for,flash,session
 from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock,available_stock,insert_user,check_user
 from flask_bcrypt import Bcrypt
+from functools import wraps
 
 # creating a flask instance
 app = Flask(__name__)
@@ -13,7 +14,16 @@ app.secret_key = 'delicate88'
 def home():  # must have a unique name
     return render_template("index.html")
 
+def login_required(f):
+    @wraps(f)
+    def protected(*args,**kwargs):
+        if 'email' not in session:
+            return redirect(url_for('login'))
+        return f(*args,**kwargs)
+    return protected
+
 @app.route('/dashboard') # decorator function
+@login_required
 def dashboard(): # View function - giving back data
     return render_template("dashboard.html")
 
@@ -31,6 +41,7 @@ def login():
         else:
             if bcrypt.check_password_hash(registered_user[-1],password):
                 flash("Logged in Successfully","Success")
+                session["email"]=email
                 return redirect(url_for("dashboard"))
             else:
                 flash("Password incorrect,try again","danger")
@@ -58,6 +69,7 @@ def register():
     return render_template("register.html")    
 
 @app.route('/stock')
+@login_required
 def stock():
     stock = get_stock()
     products = get_products()
@@ -74,6 +86,7 @@ def manage_stock():
     return redirect(url_for('stock'))
 
 @app.route('/products')
+@login_required
 def products():
     products = get_products()
     return render_template("products.html",products = products )
@@ -90,6 +103,7 @@ def add_products():
     return redirect(url_for('products'))
 
 @app.route('/sales')
+@login_required
 def sales():
     sales = get_sales()
     products = get_products()
@@ -108,6 +122,12 @@ def make_sale():
     insert_sales(new_sale)
     flash("Sale made successfully","success")
     return redirect(url_for('sales'))
+
+@app.route('/logout')
+def logout():
+    session.pop('email',None)
+    flash("Logged out Successfully")
+    return redirect(url_for('login'))
 
 
 app.run(debug=True)

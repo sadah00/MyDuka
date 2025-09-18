@@ -79,9 +79,7 @@ def insert_user(user_details):
 
 def check_user(email):
     cur.execute("select * from users where email = %s",(email,))
-    user = cur.fetchall()   
+    user = cur.fetchone()   
     return user
-
-
 # test = check_user('john@gmail.com')
 # print(test)

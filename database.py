@@ -83,3 +83,41 @@ def check_user(email):
     return user
 # test = check_user('john@gmail.com')
 # print(test)
+
+def sales_per_day():
+    cur.execute("""
+    select date(sales.created_at) as date, sum(products.selling_price * sales.quantity) as
+    total_sales from products inner join sales on sales.pid = products.id group by(date);
+    """)
+    daily_sales = cur.fetchall()
+    return daily_sales
+
+def profit_per_day():
+    cur.execute("""
+        select date(sales.created_at) as date, sum((products.selling_price - products.buying_price)* sales.quantity) as 
+        profit from sales join products on products.id = sales.pid group by(date);
+    """)
+    daily_profit = cur.fetchall()
+    return daily_profit
+
+def sales_per_product():
+    cur.execute("""
+        select products.name as p_name, sum(sales.quantity * products.selling_price) as tota_sales
+        from products join sales on products.id = sales.pid group by(p_name);
+    """)
+    product_sales = cur.fetchall()
+    return product_sales
+
+def profit_per_product():
+    cur.execute("""
+    select products.name as p_name ,sum((products.selling_price - products.buying_price) * sales.quantity) as profit from
+    sales join products on sales.pid = products.id group by(p_name);
+    """)
+    product_profit = cur.fetchall()
+    return product_profit
+
+test1=sales_per_product()
+product_names = [i[0] for i in test1]
+sales_made = [i[1] for i in test1]
+print (product_names)
+print(sales_made)

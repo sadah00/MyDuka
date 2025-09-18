@@ -1,5 +1,5 @@
 from flask import Flask , render_template ,request ,redirect ,url_for,flash,session
-from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock,available_stock,insert_user,check_user
+from database import get_products ,get_sales,get_stock,insert_products,insert_sales,insert_stock,available_stock,insert_user,check_user,sales_per_day,sales_per_product,profit_per_day,profit_per_product
 from flask_bcrypt import Bcrypt
 from functools import wraps
 
@@ -25,7 +25,25 @@ def login_required(f):
 @app.route('/dashboard') # decorator function
 @login_required
 def dashboard(): # View function - giving back data
-    return render_template("dashboard.html")
+    product_sales = sales_per_product()
+    daily_sales = sales_per_day()
+    product_profit = profit_per_product()
+    daily_profit = profit_per_day()
+    
+    product_names = [i[0] for i in product_sales]
+    sales_per_p = [i[1] for i in product_sales]
+    profit_per_p = [i[1] for i in product_profit]
+
+    date = [i[0] for i in daily_sales]
+    sales_per_d = [i[1] for i in daily_sales]
+    profit_per_d = [i[1] for i in daily_profit]
+
+
+
+    return render_template("dashboard.html",
+                product_names = product_names,sales_per_p = sales_per_p,profit_per_p = profit_per_p,     
+                date = date,sales_per_d = sales_per_d,profit_per_d = profit_per_d     
+               )
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -128,6 +146,8 @@ def logout():
     session.pop('email',None)
     flash("Logged out Successfully")
     return redirect(url_for('login'))
+
+
 
 
 app.run(debug=True)
